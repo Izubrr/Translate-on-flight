@@ -6,10 +6,13 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
-using GTranslatorAPI;
 using System.Net.Http;
 using System.Text.Json;
-
+using CSInputs.Enums;
+using System.Threading;
+using System.Runtime.InteropServices;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Translate_on_fly
 {
@@ -19,23 +22,48 @@ namespace Translate_on_fly
 
     public partial class MainWindow : UiWindow
     {
-        public ObservableCollection<string> ItemsSource { get; set; }
+        public ObservableCollection<string> LanguageItemsSource { get; set; }
+        public ObservableCollection<string> KeysItemsSource { get; set; }
+        public HotKey _hotKey;
+
         public MainWindow()
         {
             InitializeComponent();
-            HotKey _hotKey = new HotKey(Key.Q, KeyModifier.Shift | KeyModifier.Win, OnHotKeyHandler);
-            ItemsSource = LanguagesFull.GetLanguageNames();
-            // Set the data context to the window itself (or your view model)
+
+            ComboBoxModifier.SelectedIndex = Settings.Default.HotkeyModifier;
+            ComboBoxKey.SelectedIndex = Settings.Default.HotkeyKey;
+
+            ObservableCollection<string> keys = new ObservableCollection<string>();
+            for (char c = 'A'; c <= 'Z'; c++)
+            {
+                keys.Add(c.ToString());
+            }
+            KeysItemsSource = keys;
+            LanguageItemsSource = LanguagesFull.GetLanguageNames();
             DataContext = this;
-            GTranslatorAPIClient client = new GTranslatorAPIClient();
-            //client.TranslateFromNames
-            
+
+            Dictionary<string, Key> letterToKeyDictionary = new Dictionary<string, Key>();
+            for (char c = 'A'; c <= 'Z'; c++)
+            {
+                string letter = c.ToString();
+                Key key = (Key)Enum.Parse(typeof(Key), letter);
+                letterToKeyDictionary.Add(letter, key);
+            }
+            KeyModifier[] keyModifiersArray = new KeyModifier[]
+            {
+                KeyModifier.Alt,
+                KeyModifier.Ctrl,
+                KeyModifier.Shift,
+                KeyModifier.Win
+            };
+            _hotKey = new HotKey(letterToKeyDictionary.Values.ElementAt(Settings.Default.HotkeyKey), keyModifiersArray[Settings.Default.HotkeyModifier], OnHotKeyHandler);
         }
 
         static async Task<string> TranslateText(string text, string sourceLanguage, string targetLanguage)
         {
-            if (targetLanguage == null) targetLanguage = "English";
-            Languages? targetcode = (Languages?)LanguagesUtil.GetCode(targetLanguage);
+            var languegesFull = LanguagesFull.GetLanguageNames();
+            if (languegesFull.Contains(targetLanguage) == false) targetLanguage = "English";
+            Languages? targetcode = (Languages?)LanguagesFull.GetCode(targetLanguage);
 
             string url = $"https://translate.googleapis.com/translate_a/single?client=gtx&sl={sourceLanguage}&tl={targetcode.Value}&dt=t&q={Uri.EscapeDataString(text)}";
             
@@ -66,14 +94,24 @@ namespace Translate_on_fly
             textbox2.Text = translatedText;
         }
 
-        private void OnHotKeyHandler(HotKey hotKey) => CSInputs.SendInput.Keyboard.SendString(Clipboard.GetText());
+        private async void OnHotKeyHandler(HotKey hotKey)
+        {
+            //Thread.Sleep(1000);
+
+            CSInputs.SendInput.Keyboard.Send(KeyboardKeys.Ctrl, KeyFlags.Down);
+            CSInputs.SendInput.Keyboard.Send(KeyboardKeys.C);
+            CSInputs.SendInput.Keyboard.Send(KeyboardKeys.Ctrl, KeyFlags.Up);
+            string text = Clipboard.GetText(); // Ваш текст для перевода
+            string translatedText = await TranslateText(text, "auto", languagesuggestbox.Text);
+            Clipboard.SetText(translatedText);
+            CSInputs.SendInput.Keyboard.SendString(Clipboard.GetText());
+        }
 
         
         private void ThemeChange(object sender, RoutedEventArgs e)
         {
             if(Theme.GetAppTheme() == ThemeType.Light) Theme.Apply(ThemeType.Dark);
             else Theme.Apply(ThemeType.Light);
-
         }
 
         private void SettingsHide(object sender, RoutedEventArgs e) => SettingsDialog.Hide();
@@ -89,6 +127,38 @@ namespace Translate_on_fly
                 textbox1.Text = "";
                 textbox2.Text = "";
             }
+        }
+
+        private void SettingsApply(object sender, RoutedEventArgs e)
+        {
+            Dictionary<string, Key> letterToKeyDictionary = new Dictionary<string, Key>();
+            for (char c = 'A'; c <= 'Z'; c++)
+            {
+                string letter = c.ToString();
+                Key key = (Key)Enum.Parse(typeof(Key), letter);
+                letterToKeyDictionary.Add(letter, key);
+            }
+
+            KeyModifier[] keyModifiersArray = new KeyModifier[]
+            {
+                KeyModifier.Alt,
+                KeyModifier.Ctrl,
+                KeyModifier.Shift,
+                KeyModifier.Win
+            };
+            if(ComboBoxKey.SelectedIndex != Settings.Default.HotkeyKey)
+            {
+                Settings.Default.HotkeyKey = ComboBoxKey.SelectedIndex;
+                Settings.Default.HotkeyModifier = ComboBoxModifier.SelectedIndex;
+                Settings.Default.Save();
+                _hotKey = new HotKey(letterToKeyDictionary.Values.ElementAt(ComboBoxKey.SelectedIndex), keyModifiersArray[ComboBoxModifier.SelectedIndex], OnHotKeyHandler);
+            }
+            SettingsDialog.Hide();
+        }
+        private void HideFocus(object sender, RoutedEventArgs e)
+        {
+            FocusManager.SetFocusedElement(this, null);
+            Keyboard.ClearFocus();
         }
     }
 }
