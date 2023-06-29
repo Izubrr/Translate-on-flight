@@ -64,7 +64,7 @@ namespace Translate_on_fly
             var languegesFull = LanguagesFull.GetLanguageNames();
             if (languegesFull.Contains(targetLanguage) == false) targetLanguage = "English";
             Languages? targetcode = (Languages?)LanguagesFull.GetCode(targetLanguage);
-
+            
             string url = $"https://translate.googleapis.com/translate_a/single?client=gtx&sl={sourceLanguage}&tl={targetcode.Value}&dt=t&q={Uri.EscapeDataString(text)}";
             
             using (HttpClient httpClient = new HttpClient())
@@ -90,8 +90,11 @@ namespace Translate_on_fly
         private async void TranslateButton_Click(object sender, RoutedEventArgs e) 
         {
             string text = textbox1.Text; // Ваш текст для перевода
-            string translatedText = await TranslateText(text, "auto", languagesuggestbox.Text);
-            textbox2.Text = translatedText;
+            if(text.Length > 1)
+            {
+                string translatedText = await TranslateText(text, "auto", languagesuggestbox.Text);
+                textbox2.Text = translatedText;
+            }  
         }
 
         private async void OnHotKeyHandler(HotKey hotKey)

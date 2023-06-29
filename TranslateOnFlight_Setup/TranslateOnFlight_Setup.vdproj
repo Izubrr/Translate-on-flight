@@ -54,8 +54,13 @@
                 {
                     "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
                     {
-                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 и x64)"
                     "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.NetCore.CoreRuntime.7.0.x64"
+                    {
+                    "Name" = "8:Среда выполнения .NET 7.0.7 (x64)"
+                    "ProductCode" = "8:Microsoft.NetCore.CoreRuntime.7.0.x64"
                     }
                 }
             }
@@ -75,6 +80,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -183,7 +196,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Translate on Flight"
         "ProductCode" = "8:{E60BC684-8272-4998-91C7-2E61E568578F}"
-        "PackageCode" = "8:{A3BF2A1B-6D46-423B-B1A9-B350076D2448}"
+        "PackageCode" = "8:{27E30B79-4B11-402D-829F-F392BEB9C65E}"
         "UpgradeCode" = "8:{C91BE70B-0FA8-4FA5-8F32-192018F4BE69}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
@@ -207,7 +220,7 @@
         "TargetPlatform" = "3:1"
         "PreBuildEvent" = "8:"
         "PostBuildEvent" = "8:"
-        "RunPostBuildEvent" = "3:0"
+        "RunPostBuildEvent" = "3:1"
         }
         "Registry"
         {
@@ -303,20 +316,6 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_7D3BA42B88134882BA8D9C535063B085"
-            {
-            "Name" = "8:ProjectShortcut"
-            "Arguments" = "8:"
-            "Description" = "8:"
-            "ShowCmd" = "3:1"
-            "IconIndex" = "3:0"
-            "Transitive" = "11:FALSE"
-            "Target" = "8:_4D6BF18E06F94889AA771822FC8520C3"
-            "Folder" = "8:_347C82BE87FF4B778D9E71480CF0A82F"
-            "WorkingFolder" = "8:_347C82BE87FF4B778D9E71480CF0A82F"
-            "Icon" = "8:"
-            "Feature" = "8:"
-            }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_B2F51A66B47C4CD5B4209F74887F6968"
             {
             "Name" = "8:Translate on Flight"
