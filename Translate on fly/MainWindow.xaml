@@ -20,41 +20,67 @@
         WindowBackdropType="Mica"
         WindowCornerPreference="Round"
         WindowStartupLocation="CenterScreen"
-        Background="DarkGreen" SizeToContent="Height" ResizeMode="NoResize" Icon="/Assets/applicationIcon-256.png" >
-    <Grid x:Name="grid" Visibility="Visible" Cursor="" MouseDown="HideSuggests">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="36"/>
-            <RowDefinition Height="39"/>
-            <RowDefinition Height="Auto" MinHeight="73.242"/>
-            <RowDefinition Height="35.006"/>
-            <RowDefinition Height="Auto" MinHeight="73.242"/>
-            <RowDefinition Height="Auto" MinHeight="36"/>
-        </Grid.RowDefinitions>
+        SizeToContent="Height" ResizeMode="NoResize" Icon="/Assets/applicationIcon-256.png" >
+    <Grid>
+        <Grid x:Name="TranslationGrid" Visibility="Visible" Cursor="" MouseDown="HideSuggests">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="36"/>
+                <RowDefinition Height="39"/>
+                <RowDefinition Height="Auto" MinHeight="73.242"/>
+                <RowDefinition Height="35.006"/>
+                <RowDefinition Height="Auto" MinHeight="73.242"/>
+                <RowDefinition Height="Auto" MinHeight="36"/>
+            </Grid.RowDefinitions>
 
-        <ui:TitleBar
+            <ui:TitleBar
             Title="Translate on Flight"
             UseSnapLayout="True" Icon="/Assets/applicationIcon-256.png"  VerticalAlignment="Top" Padding="9, 8, 16, 8" CanMaximize="False" ShowMaximize="False"/>
 
-        <Label Content="Translate your text easily" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center" FontSize="22" FontWeight="Bold" Height="34" Width="450" MouseUp="HideFocus"/>
-        <ui:TextBox x:Name="textbox1" MinLines="2" AcceptsReturn="True" PlaceholderText="Type text here" Margin="10,10,10,10" Grid.Row="2" AcceptsTab="True" MaxLines="4" TextWrapping="Wrap" VerticalAlignment="Stretch" TextChanged="textbox_TextChanged" MaxLength="5000"/>
-        <ui:AutoSuggestBox x:Name="languagesuggestbox" ItemsSource="{Binding LanguageItemsSource}" PlaceholderText="Search Language..." Margin="10,0,115,0" Grid.Row="3" Height="36" MaxDropDownHeight="115"/>
-        <ui:Button Content="Translate" Height="36" HorizontalAlignment="Stretch" Margin="360,0,10,0" Grid.Row="3" Click="TranslateButton_Click"/>
-        <ui:TextBox x:Name="textbox2" MinLines="2" AcceptsReturn="True" PlaceholderText="こんにちは世界" Margin="10,10,10,10" Grid.Row="4" AcceptsTab="True" MaxLines="4" TextWrapping="Wrap" VerticalAlignment="Stretch" TextChanged="textbox_TextChanged" IsReadOnly="True"/>
-        <ui:Button Padding="6" Icon="Settings20" Appearance="Secondary" FontSize="16" VerticalAlignment="Top" Height="36" Width="36" Grid.Row="5" Margin="424,0,0,10" Click="SettingsShow"/>
-        <ui:Button Padding="6" Icon="DarkTheme20" Appearance="Secondary" FontSize="16" VerticalAlignment="Top" Height="36" Width="36" Grid.Row="5" Margin="383,0,0,10" Click="ThemeChange" />
+            <Label Content="Translate your text easily" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center" FontSize="22" FontWeight="Bold" Height="34" Width="450" MouseUp="HideFocus"/>
+            <ui:TextBox x:Name="textbox1" MinLines="2" AcceptsReturn="True" PlaceholderText="Type text here" Margin="10,10,10,10" Grid.Row="2" AcceptsTab="True" MaxLines="4" TextWrapping="Wrap" VerticalAlignment="Stretch" TextChanged="textbox_TextChanged" MaxLength="5000"/>
+            <ui:AutoSuggestBox x:Name="languagesuggestbox" ItemsSource="{Binding LanguageItemsSource}" PlaceholderText="Search Language..." Margin="10,0,115,0" Grid.Row="3" Height="36" MaxDropDownHeight="115"/>
+            <ui:Button Content="Translate" Height="36" HorizontalAlignment="Stretch" Margin="360,0,10,0" Grid.Row="3" Click="TranslateButton_Click"/>
+            <ui:TextBox x:Name="textbox2" MinLines="2" AcceptsReturn="True" PlaceholderText="こんにちは世界" Margin="10,10,10,10" Grid.Row="4" AcceptsTab="True" MaxLines="4" TextWrapping="Wrap" VerticalAlignment="Stretch" TextChanged="textbox_TextChanged" IsReadOnly="True"/>
+            <ui:Button Padding="6" Icon="Settings20" Appearance="Secondary" FontSize="16" VerticalAlignment="Top" Height="36" Width="36" Grid.Row="5" Margin="424,0,0,10" Click="SettingsShow"/>
+            <ui:Button Padding="6" Icon="DarkTheme20" Appearance="Secondary" FontSize="16" VerticalAlignment="Top" Height="36" Width="36" Grid.Row="5" Margin="383,0,0,10" Click="ThemeChange" />
+            <ui:Button Content="Translation" Height="36" HorizontalAlignment="Stretch" Margin="10,0,353,10" Grid.Row="5" VerticalAlignment="Bottom" Click="TranscriptionGridShow"/>
 
-        <ui:Dialog x:Name="SettingsDialog" Grid.RowSpan="6" ButtonLeftName="Apply" ButtonRightName="Close" Title="Settings" ButtonLeftClick="SettingsApply" ButtonRightClick="SettingsHide">
-            <DockPanel>
-                <Label Content="HotKey" Padding="6, 16, 6, 16"/>
-                <ComboBox x:Name="ComboBoxModifier">
-                    <ComboBoxItem Content="Alt"/>
-                    <ComboBoxItem Content="Ctrl"/>
-                    <ComboBoxItem Content="Shift"/>
-                    <ComboBoxItem Content="Win"/>
-                </ComboBox>
-                <Label Content="+" Padding="6, 16, 6, 16"/>
-                <ComboBox x:Name="ComboBoxKey" ItemsSource="{Binding KeysItemsSource}"/>
-            </DockPanel>
-        </ui:Dialog>
+            <ui:Dialog x:Name="SettingsDialog" Grid.RowSpan="6" ButtonLeftName="Apply" ButtonRightName="Close" Title="Settings" ButtonLeftClick="SettingsApply" ButtonRightClick="SettingsHide" Visibility="Hidden">
+                <DockPanel>
+                    <Label Content="HotKey" Padding="6, 16, 6, 16"/>
+                    <ComboBox x:Name="ComboBoxModifier">
+                        <ComboBoxItem Content="Alt"/>
+                        <ComboBoxItem Content="Ctrl"/>
+                        <ComboBoxItem Content="Shift"/>
+                        <ComboBoxItem Content="Win"/>
+                    </ComboBox>
+                    <Label Content="+" Padding="6, 16, 6, 16"/>
+                    <ComboBox x:Name="ComboBoxKey" ItemsSource="{Binding KeysItemsSource}"/>
+                </DockPanel>
+            </ui:Dialog>
+        </Grid>
+        <Grid x:Name="TranscriptionGrid" Visibility="Collapsed" Cursor="" MouseDown="HideSuggests">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="36"/>
+                <RowDefinition Height="39"/>
+                <RowDefinition Height="Auto" MinHeight="73.242"/>
+                <RowDefinition Height="35.006"/>
+                <RowDefinition Height="Auto" MinHeight="73.242"/>
+                <RowDefinition Height="Auto" MinHeight="36"/>
+            </Grid.RowDefinitions>
+
+            <ui:TitleBar
+            Title="Translate on Flight"
+            UseSnapLayout="True" Icon="/Assets/applicationIcon-256.png"  VerticalAlignment="Top" Padding="9, 8, 16, 8" CanMaximize="False" ShowMaximize="False"/>
+
+            <Label Content="Translate your text easily" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center" FontSize="22" FontWeight="Bold" Height="34" Width="450" MouseUp="HideFocus"/>
+            <ui:TextBox x:Name="textbox1_Trans" MinLines="2" AcceptsReturn="True" PlaceholderText="Type transcription here" Margin="10,10,10,10" Grid.Row="2" AcceptsTab="True" MaxLines="4" TextWrapping="Wrap" VerticalAlignment="Stretch" TextChanged="textbox_TextChanged" MaxLength="5000"/>
+            <ComboBox x:Name="languagesuggestbox_Trans" ItemsSource="{Binding TransItemsSource}" SelectedItem="Georgian" Margin="10,0,295,0" Grid.Row="3" Height="36" MaxDropDownHeight="115"/>
+            <ui:AutoSuggestBox x:Name="languagesuggestbox2_Trans" ItemsSource="{Binding LanguageItemsSource}" PlaceholderText="Language To" Margin="180,0,125,0" Grid.Row="3" Height="36" MaxDropDownHeight="115"/>
+            <ui:Button Content="Translate" Height="36" HorizontalAlignment="Stretch" Margin="350,0,10,0" Grid.Row="3" Click="TranscriptButton_Click"/>
+            <ui:TextBox x:Name="textbox2_Trans" MinLines="2" AcceptsReturn="True" PlaceholderText="Translated text" Margin="10,10,10,10" Grid.Row="4" AcceptsTab="True" MaxLines="4" TextWrapping="Wrap" VerticalAlignment="Stretch" TextChanged="textbox_TextChanged" IsReadOnly="True"/>
+            <ui:Button Padding="6" Icon="DarkTheme20" Appearance="Secondary" FontSize="16" VerticalAlignment="Top" Height="36" Width="36" Grid.Row="4" Margin="424,70,0,0" Click="ThemeChange" Grid.RowSpan="2" />
+            <ui:Button Content="Transcription" Height="36" HorizontalAlignment="Stretch" Margin="10,0,353,10" Grid.Row="5" VerticalAlignment="Bottom" Click="TranslationGridShow"/>
+        </Grid>
     </Grid>
 </ui:UiWindow>

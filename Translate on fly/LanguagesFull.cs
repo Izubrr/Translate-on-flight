@@ -340,6 +340,95 @@ namespace Translate_on_fly
             return languages;
         }
 
+        public static ObservableCollection<string> GetTransNames()
+        {
+            ObservableCollection<string> languages = new ObservableCollection<string>
+            {
+                "Georgian",
+                "Arabic"
+            };
+
+            return languages;
+        }
+        public static Dictionary<string, string> GetGeorgianReverseTransliterationMap()
+        {
+            Dictionary<string, string> georgianReverseTransliterationMap = new Dictionary<string, string>
+            {
+                {"ა", "a"},
+                {"ბ", "b"},
+                {"გ", "g"},
+                {"დ", "d"},
+                {"ე", "e"},
+                {"ვ", "v"},
+                {"ზ", "z"},
+                {"თ", "t"},
+                {"ი", "i"},
+                {"კ", "k"},
+                {"ლ", "l"},
+                {"მ", "m"},
+                {"ნ", "n"},
+                {"ო", "o"},
+                {"პ", "p"},
+                {"ჟ", "zh"},
+                {"რ", "r"},
+                {"ს", "s"},
+                {"ტ", "t"},
+                {"უ", "u"},
+                {"ფ", "ph"},
+                {"ქ", "q"},
+                {"ღ", "gh"},
+                {"ყ", "k"},
+                {"შ", "sh"},
+                {"ჩ", "ch"},
+                {"ც", "ts"},
+                {"ძ", "dz"},
+                {"წ", "ts"},
+                {"ჭ", "ch"},
+                {"ხ", "kh"},
+                {"ჯ", "j"},
+                {"ჰ", "h"},
+            };
+
+            return georgianReverseTransliterationMap;
+        }
+
+        public static Dictionary<string, string> GetArabicReverseTransliterationMap()
+        {
+            Dictionary<string, string> arabicReverseTransliterationMap = new Dictionary<string, string>
+            {
+                {"ا", "a"},
+                {"ب", "b"},
+                {"ت", "t"},
+                {"ث", "th"},
+                {"ج", "j"},
+                {"ح", "H"},
+                {"خ", "kh"},
+                {"د", "d"},
+                {"ذ", "dh"},
+                {"ر", "r"},
+                {"ز", "z"},
+                {"س", "s"},
+                {"ش", "sh"},
+                {"ص", "S"},
+                {"ض", "D"},
+                {"ط", "T"},
+                {"ظ", "Z"},
+                {"ع", "'"},
+                {"غ", "gh"},
+                {"ف", "f"},
+                {"ق", "q"},
+                {"ك", "k"},
+                {"ل", "l"},
+                {"م", "m"},
+                {"ن", "n"},
+                {"ه", "h"},
+                {"و", "w"},
+                {"ي", "y"},
+            };
+
+            return arabicReverseTransliterationMap;
+        }
+
         public static string GetName(Languages languageCode)
         {
             string value = null;

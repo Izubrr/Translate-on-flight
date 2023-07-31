@@ -13,6 +13,7 @@ using System.Threading;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Linq;
+using Windows.Data.Text;
 
 namespace Translate_on_fly
 {
@@ -24,6 +25,7 @@ namespace Translate_on_fly
     {
         public ObservableCollection<string> LanguageItemsSource { get; set; }
         public ObservableCollection<string> KeysItemsSource { get; set; }
+        public ObservableCollection<string> TransItemsSource { get; set; }
         public HotKey _hotKey;
 
         public MainWindow()
@@ -40,6 +42,7 @@ namespace Translate_on_fly
             }
             KeysItemsSource = keys;
             LanguageItemsSource = LanguagesFull.GetLanguageNames();
+            TransItemsSource = LanguagesFull.GetTransNames();
             DataContext = this;
 
             Dictionary<string, Key> letterToKeyDictionary = new Dictionary<string, Key>();
@@ -119,6 +122,8 @@ namespace Translate_on_fly
 
         private void SettingsHide(object sender, RoutedEventArgs e) => SettingsDialog.Hide();
         private void SettingsShow(object sender, RoutedEventArgs e) => SettingsDialog.Show();
+        //private void TranscriptionHide(object sender, RoutedEventArgs e) => TranscriptionDialog.Hide();
+        //private void TranscriptionShow(object sender, RoutedEventArgs e) => TranscriptionDialog.Show();
 
         private void HideSuggests(object sender, MouseButtonEventArgs e) => languagesuggestbox.IsSuggestionListOpen = false;
 
@@ -162,6 +167,57 @@ namespace Translate_on_fly
         {
             FocusManager.SetFocusedElement(this, null);
             Keyboard.ClearFocus();
+        }
+
+
+        static string ReverseTransliterate(string input, Dictionary<string, string> transliterationMap)
+        {
+            foreach (var kvp in transliterationMap)
+            {
+                input = input.Replace(kvp.Value, kvp.Key);
+            }
+            return input;
+        }
+
+        private void TranslationGridShow(object sender, RoutedEventArgs e)
+        {
+            TranslationGrid.Visibility = Visibility.Visible;
+            TranscriptionGrid.Visibility = Visibility.Collapsed;
+        }
+        private void TranscriptionGridShow(object sender, RoutedEventArgs e)
+        {
+            TranslationGrid.Visibility = Visibility.Collapsed;
+            TranscriptionGrid.Visibility = Visibility.Visible;
+        }
+
+        private async void TranscriptButton_Click(object sender, RoutedEventArgs e)
+        {
+            string word = ReverseTransliteration(languagesuggestbox_Trans.Text);
+            string translatedText = await TranslateText(word, "auto", languagesuggestbox2_Trans.Text);
+            textbox2_Trans.Text = translatedText;
+        }
+        private string ReverseTransliteration(string language)
+        {
+            string text = textbox1_Trans.Text.ToLower(); // Ваш текст для перевода
+            if (text.Length > 1)
+            {
+                string latinWord = textbox1_Trans.Text;
+                Dictionary<string, string> ReverseTransliterationMap;
+                switch (language)
+                {
+                    case "Georgian":
+                        ReverseTransliterationMap = LanguagesFull.GetGeorgianReverseTransliterationMap();
+                        break;
+                    case "Arabic":
+                        ReverseTransliterationMap = LanguagesFull.GetArabicReverseTransliterationMap();
+                        break;
+                    default:
+                        return "";
+                }
+                string Word = ReverseTransliterate(latinWord, ReverseTransliterationMap);
+                return Word;
+            }
+            else return "";
         }
     }
 }
