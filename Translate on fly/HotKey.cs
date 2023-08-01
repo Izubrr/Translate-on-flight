@@ -51,6 +51,7 @@ namespace Translate_on_fly
                 ComponentDispatcher.ThreadFilterMessage += new ThreadMessageEventHandler(ComponentDispatcherThreadFilterMessage);
             }
 
+            if(!_dictHotKeyToCalBackProc.ContainsKey(Id))
             _dictHotKeyToCalBackProc.Add(Id, this);
 
             Debug.Print(result.ToString() + ", " + Id + ", " + virtualKeyCode);

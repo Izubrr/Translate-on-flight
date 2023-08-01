@@ -37,7 +37,7 @@
             UseSnapLayout="True" Icon="/Assets/applicationIcon-256.png"  VerticalAlignment="Top" Padding="9, 8, 16, 8" CanMaximize="False" ShowMaximize="False"/>
 
             <Label Content="Translate your text easily" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center" FontSize="22" FontWeight="Bold" Height="34" Width="450" MouseUp="HideFocus"/>
-            <ui:TextBox x:Name="textbox1" MinLines="2" AcceptsReturn="True" PlaceholderText="Type text here" Margin="10,10,10,10" Grid.Row="2" AcceptsTab="True" MaxLines="4" TextWrapping="Wrap" VerticalAlignment="Stretch" TextChanged="textbox_TextChanged" MaxLength="5000"/>
+            <ui:TextBox x:Name="textbox1" MinLines="2" AcceptsReturn="True" PlaceholderText="Type text here" Margin="10,10,10,10" Grid.Row="2" AcceptsTab="True" MaxLines="4" TextWrapping="Wrap" VerticalAlignment="Stretch" TextChanged="textbox_TextChanged" MaxLength="2000"/>
             <ui:AutoSuggestBox x:Name="languagesuggestbox" ItemsSource="{Binding LanguageItemsSource}" PlaceholderText="Search Language..." Margin="10,0,115,0" Grid.Row="3" Height="36" MaxDropDownHeight="115"/>
             <ui:Button Content="Translate" Height="36" HorizontalAlignment="Stretch" Margin="360,0,10,0" Grid.Row="3" Click="TranslateButton_Click"/>
             <ui:TextBox x:Name="textbox2" MinLines="2" AcceptsReturn="True" PlaceholderText="こんにちは世界" Margin="10,10,10,10" Grid.Row="4" AcceptsTab="True" MaxLines="4" TextWrapping="Wrap" VerticalAlignment="Stretch" TextChanged="textbox_TextChanged" IsReadOnly="True"/>
@@ -74,7 +74,7 @@
             UseSnapLayout="True" Icon="/Assets/applicationIcon-256.png"  VerticalAlignment="Top" Padding="9, 8, 16, 8" CanMaximize="False" ShowMaximize="False"/>
 
             <Label Content="Translate your text easily" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center" FontSize="22" FontWeight="Bold" Height="34" Width="450" MouseUp="HideFocus"/>
-            <ui:TextBox x:Name="textbox1_Trans" MinLines="2" AcceptsReturn="True" PlaceholderText="Type transcription here" Margin="10,10,10,10" Grid.Row="2" AcceptsTab="True" MaxLines="4" TextWrapping="Wrap" VerticalAlignment="Stretch" TextChanged="textbox_TextChanged" MaxLength="5000"/>
+            <ui:TextBox x:Name="textbox1_Trans" MinLines="2" AcceptsReturn="True" PlaceholderText="Type transcription here" Margin="10,10,10,10" Grid.Row="2" AcceptsTab="True" MaxLines="4" TextWrapping="Wrap" VerticalAlignment="Stretch" TextChanged="textbox_TextChanged" MaxLength="2000"/>
             <ComboBox x:Name="languagesuggestbox_Trans" ItemsSource="{Binding TransItemsSource}" SelectedItem="Georgian" Margin="10,0,295,0" Grid.Row="3" Height="36" MaxDropDownHeight="115"/>
             <ui:AutoSuggestBox x:Name="languagesuggestbox2_Trans" ItemsSource="{Binding LanguageItemsSource}" PlaceholderText="Language To" Margin="180,0,125,0" Grid.Row="3" Height="36" MaxDropDownHeight="115"/>
             <ui:Button Content="Translate" Height="36" HorizontalAlignment="Stretch" Margin="350,0,10,0" Grid.Row="3" Click="TranscriptButton_Click"/>

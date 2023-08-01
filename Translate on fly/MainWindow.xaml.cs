@@ -14,6 +14,7 @@ using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Linq;
 using Windows.Data.Text;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Translate_on_fly
 {
@@ -102,15 +103,31 @@ namespace Translate_on_fly
 
         private async void OnHotKeyHandler(HotKey hotKey)
         {
-            //Thread.Sleep(1000);
+            string selectedText = string.Empty;
 
-            CSInputs.SendInput.Keyboard.Send(KeyboardKeys.Ctrl, KeyFlags.Down);
-            CSInputs.SendInput.Keyboard.Send(KeyboardKeys.C);
-            CSInputs.SendInput.Keyboard.Send(KeyboardKeys.Ctrl, KeyFlags.Up);
-            string text = Clipboard.GetText(); // Ваш текст для перевода
-            string translatedText = await TranslateText(text, "auto", languagesuggestbox.Text);
-            Clipboard.SetText(translatedText);
-            CSInputs.SendInput.Keyboard.SendString(Clipboard.GetText());
+            try
+            {
+                // Копируем выделенный текст в буфер обмена
+                ApplicationCommands.Copy.Execute(null, null);
+
+                // Получаем данные из буфера обмена
+                IDataObject dataObject = Clipboard.GetDataObject();
+                if (dataObject != null && dataObject.GetDataPresent(DataFormats.Text))
+                {
+                    selectedText = dataObject.GetData(DataFormats.Text) as string;
+                }
+                if(selectedText != null)
+                {
+                    string translatedText = await TranslateText(selectedText, "auto", languagesuggestbox.Text);
+                    Clipboard.SetDataObject(translatedText);
+                    CSInputs.SendInput.Keyboard.SendString(Clipboard.GetText());
+                }
+            }
+            catch (Exception ex)
+            {
+                // Обработка исключений
+                Console.WriteLine("Ошибка: " + ex.Message);
+            }
         }
 
         
@@ -122,9 +139,6 @@ namespace Translate_on_fly
 
         private void SettingsHide(object sender, RoutedEventArgs e) => SettingsDialog.Hide();
         private void SettingsShow(object sender, RoutedEventArgs e) => SettingsDialog.Show();
-        //private void TranscriptionHide(object sender, RoutedEventArgs e) => TranscriptionDialog.Hide();
-        //private void TranscriptionShow(object sender, RoutedEventArgs e) => TranscriptionDialog.Show();
-
         private void HideSuggests(object sender, MouseButtonEventArgs e) => languagesuggestbox.IsSuggestionListOpen = false;
 
         private void textbox_TextChanged(object sender, TextChangedEventArgs e)
@@ -139,27 +153,17 @@ namespace Translate_on_fly
 
         private void SettingsApply(object sender, RoutedEventArgs e)
         {
-            Dictionary<string, Key> letterToKeyDictionary = new Dictionary<string, Key>();
-            for (char c = 'A'; c <= 'Z'; c++)
+            if (ComboBoxKey.SelectedIndex != Settings.Default.HotkeyKey)
             {
-                string letter = c.ToString();
-                Key key = (Key)Enum.Parse(typeof(Key), letter);
-                letterToKeyDictionary.Add(letter, key);
-            }
-
-            KeyModifier[] keyModifiersArray = new KeyModifier[]
-            {
-                KeyModifier.Alt,
-                KeyModifier.Ctrl,
-                KeyModifier.Shift,
-                KeyModifier.Win
-            };
-            if(ComboBoxKey.SelectedIndex != Settings.Default.HotkeyKey)
-            {
+                if (_hotKey != null)
+                {
+                    _hotKey.Unregister();
+                    _hotKey = null;
+                }
                 Settings.Default.HotkeyKey = ComboBoxKey.SelectedIndex;
                 Settings.Default.HotkeyModifier = ComboBoxModifier.SelectedIndex;
                 Settings.Default.Save();
-                _hotKey = new HotKey(letterToKeyDictionary.Values.ElementAt(ComboBoxKey.SelectedIndex), keyModifiersArray[ComboBoxModifier.SelectedIndex], OnHotKeyHandler);
+                _hotKey = new HotKey(Arrays.KeyDictionary.Values.ElementAt(ComboBoxKey.SelectedIndex), Arrays.keyModifiers[ComboBoxModifier.SelectedIndex], OnHotKeyHandler);
             }
             SettingsDialog.Hide();
         }
@@ -168,8 +172,6 @@ namespace Translate_on_fly
             FocusManager.SetFocusedElement(this, null);
             Keyboard.ClearFocus();
         }
-
-
         static string ReverseTransliterate(string input, Dictionary<string, string> transliterationMap)
         {
             foreach (var kvp in transliterationMap)
