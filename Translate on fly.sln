@@ -5,7 +5,7 @@ VisualStudioVersion = 17.6.33801.468
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Translate on Flight", "Translate on fly\Translate on Flight.csproj", "{4BF66672-3507-4E3C-9CB5-A0556A4117E4}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "TranslateOnFlight_Setup", "TranslateOnFlight_Setup\TranslateOnFlight_Setup.vdproj", "{0C1B2C1F-1493-4A3D-97DB-271BA927ABDE}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Translate on Flight Setup", "Translate on Flight Setup\Translate on Flight Setup.vdproj", "{A408AD11-2FDD-4132-869C-A29175C46A5D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,8 +17,8 @@ Global
 		{4BF66672-3507-4E3C-9CB5-A0556A4117E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4BF66672-3507-4E3C-9CB5-A0556A4117E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4BF66672-3507-4E3C-9CB5-A0556A4117E4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0C1B2C1F-1493-4A3D-97DB-271BA927ABDE}.Debug|Any CPU.ActiveCfg = Debug
-		{0C1B2C1F-1493-4A3D-97DB-271BA927ABDE}.Release|Any CPU.ActiveCfg = Release
+		{A408AD11-2FDD-4132-869C-A29175C46A5D}.Debug|Any CPU.ActiveCfg = Debug
+		{A408AD11-2FDD-4132-869C-A29175C46A5D}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
