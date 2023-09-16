@@ -8,13 +8,12 @@ using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 using System.Net.Http;
 using System.Text.Json;
-using CSInputs.Enums;
 using System.Threading;
-using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Linq;
-using Windows.Data.Text;
-using static System.Net.Mime.MediaTypeNames;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Security.Cryptography.Xml;
 
 namespace Translate_on_fly
 {
@@ -68,9 +67,9 @@ namespace Translate_on_fly
             var languegesFull = LanguagesFull.GetLanguageNames();
             if (languegesFull.Contains(targetLanguage) == false) targetLanguage = "English";
             Languages? targetcode = (Languages?)LanguagesFull.GetCode(targetLanguage);
-            
+
             string url = $"https://translate.googleapis.com/translate_a/single?client=gtx&sl={sourceLanguage}&tl={targetcode.Value}&dt=t&q={Uri.EscapeDataString(text)}";
-            
+
             using (HttpClient httpClient = new HttpClient())
             {
                 HttpResponseMessage response = await httpClient.GetAsync(url);
@@ -91,49 +90,36 @@ namespace Translate_on_fly
             }
         }
 
-        private async void TranslateButton_Click(object sender, RoutedEventArgs e) 
+        private async void TranslateButton_Click(object sender, RoutedEventArgs e)
         {
             string text = textbox1.Text; // Ваш текст для перевода
-            if(text.Length > 1)
+            if (text.Length > 1)
             {
                 string translatedText = await TranslateText(text, "auto", languagesuggestbox.Text);
                 textbox2.Text = translatedText;
-            }  
+            }
         }
 
         private async void OnHotKeyHandler(HotKey hotKey)
         {
-            string selectedText = string.Empty;
+            Clipboard.Clear();
 
-            try
-            {
-                // Копируем выделенный текст в буфер обмена
-                ApplicationCommands.Copy.Execute(null, null);
+            await Task.Run(KeySimulation.CtrlCAsync);
 
-                // Получаем данные из буфера обмена
-                IDataObject dataObject = Clipboard.GetDataObject();
-                if (dataObject != null && dataObject.GetDataPresent(DataFormats.Text))
-                {
-                    selectedText = dataObject.GetData(DataFormats.Text) as string;
-                }
-                if(selectedText != null)
-                {
-                    string translatedText = await TranslateText(selectedText, "auto", languagesuggestbox.Text);
-                    Clipboard.SetDataObject(translatedText);
-                    CSInputs.SendInput.Keyboard.SendString(Clipboard.GetText());
-                }
-            }
-            catch (Exception ex)
+            string selectedText = Clipboard.GetText();
+
+            if (selectedText.Length > 0)
             {
-                // Обработка исключений
-                Console.WriteLine("Ошибка: " + ex.Message);
+                string translatedText = await TranslateText(selectedText, "auto", languagesuggestbox.Text);
+                Clipboard.SetText(translatedText);
+
+                KeySimulation.CtrlV();
             }
         }
 
-        
         private void ThemeChange(object sender, RoutedEventArgs e)
         {
-            if(Theme.GetAppTheme() == ThemeType.Light) Theme.Apply(ThemeType.Dark);
+            if (Theme.GetAppTheme() == ThemeType.Light) Theme.Apply(ThemeType.Dark);
             else Theme.Apply(ThemeType.Light);
         }
 
